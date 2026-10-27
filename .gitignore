@@ -1,0 +1,27 @@
+# ==== Secretos / credenciales (NUNCA subir) ====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+*.secret
+
+# ==== Datos y dumps de base de datos ====
+db_data/
+*.dump
+*.bak
+backup*/
+*.sql.gz
+
+# ==== Logs ====
+*.log
+
+# ==== Sistema operativo / editores ====
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

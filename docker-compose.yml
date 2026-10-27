@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_biblioteca
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      BIBLIOTECARIO_PASSWORD: ${BIBLIOTECARIO_PASSWORD}
+      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD}
+      TZ: America/Argentina/Buenos_Aires
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # Los scripts .sql se ejecutan en orden alfabetico SOLO la primera vez (volumen vacio)
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # $$ hace que la variable se lea dentro del contenedor y no quede escrita en la config
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - red_biblioteca
+
+volumes:
+  db_data:
+
+networks:
+  red_biblioteca:
